@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 const roomSchema = new Schema({
     title:{
-        type:Schema,
+        type:String,
         required:true,
         minLength:[5,"title must be atleast of 5 characters"],
         maxLength:[50,"title must be smaller than 50 characters"]
@@ -32,5 +32,5 @@ const roomSchema = new Schema({
     ]
 })
 
-const roomModel = new model("room",roomSchema)
+const roomModel = new model("room",roomSchema);
 export default roomModel;
