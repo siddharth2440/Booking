@@ -21,37 +21,45 @@ export const register =async (req,res) =>{
     })
 }
 
-export const login =async () =>{
+export const login =async (req,res) =>{
     const {email, password} = req.body;
     const isMailExists = await user.findOne({ email: email}).select("+password");
     if(!isMailExists){
         return res.status(400).json({success:false,message: "Email does not exist"});
     }
-
+    console.log("Email exist")
     const compare = await isMailExists.comparePassword(password);
     if(!compare){
         return res.status(400).json({success:false,message: "Password does not match"});
     }
-    const token = isMailExists.createToken();
-    res.cookie("token", token,cookieOptions);
+    console.log("Password is same");
+    const token = await isMailExists.createJWTToken();
+    res.cookie("token",token,cookieOptions);
+    isMailExists.password = undefined;
     return res.status(200).json({
         success:true,
-        message:"Login successfully"
+        message:"Login successfully",
+        isMailExists
     })
 }
 
 export const logout = async (req, res) => {
-    return res.cookie("token",null,{
+    res.cookie("token",null,{
         httpOnly: true,
         secure: true,
         maxAge:0
+    })
+
+    return res.status(200).json({
+        success:true,
+        message:"User logout Succesfully"
     })
 }
 
 export const getUserprofile = async (req, res) => {
     const {id} = req.user;
-    const user = await user.findById(id);
-    if (!user) {
+    const User = await user.findById(id);
+    if (!User) {
         return res.status(400).json({
             success: false,
             message: "User not found"
@@ -61,6 +69,6 @@ export const getUserprofile = async (req, res) => {
     return res.status(200).json({
         success: true,
         message: "User found",
-        userInfo: user
+        userInfo: User
     })   
 }

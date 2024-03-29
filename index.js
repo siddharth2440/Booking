@@ -6,6 +6,8 @@ import {config} from "dotenv"
 import userRoute from "./routes/user.route.js"
 import hotelRoute from "./routes/hotel.route.js"
 import roomRoute from "./routes/room.route.js"
+import cookieParser from "cookie-parser"
+import morgan from "morgan"
 config();
 const app = express()
 const PORT = 3001 || process.env.PORT
@@ -17,6 +19,9 @@ app.use(cors({
     origin:process.env.FRONTENED_URL,
     credentials:true
 }))
+
+app.use(cookieParser())
+app.use(morgan("dev"))
 
 app.use("/api/v1/users",userRoute);
 app.use("/api/v1/hotels",hotelRoute);
