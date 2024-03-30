@@ -1,21 +1,21 @@
 import { Router } from "express";
 import {createHotel,deleteHotel,getHotel,getHotels,updateHotel} from "../controllers/hotel.controller.js"
-import {isLoggedIn} from "../middlewares/auth.middleware.js"
+import {isLoggedIn,authorizedRoles} from "../middlewares/auth.middleware.js"
 const router = Router();
 
 //create Hotel
-router.post('/',isLoggedIn,createHotel);
+router.post('/',isLoggedIn,authorizedRoles("ADMIN"),createHotel);
 
 //update Hotel
-router.put('/:id',isLoggedIn,updateHotel)
+router.put('/:id',isLoggedIn,authorizedRoles("ADMIN"),updateHotel)
 
 //delete Hotel
-router.delete('/:hotelId',isLoggedIn,deleteHotel);
+router.delete('/:hotelId',isLoggedIn,authorizedRoles("ADMIN"),deleteHotel);
 
 //get Hotel
 router.get('/:id',getHotel);
 
 //get Hotels  (only Access By the Admin)
-router.get('/',isLoggedIn,getHotels);
+router.get('/',isLoggedIn,authorizedRoles("ADMIN"),getHotels);
 
 export default router;

@@ -43,6 +43,7 @@ export const login =async (req,res) =>{
     })
 }
 
+
 export const logout = async (req, res) => {
     res.cookie("token",null,{
         httpOnly: true,
@@ -55,7 +56,7 @@ export const logout = async (req, res) => {
         message:"User logout Succesfully"
     })
 }
-
+ 
 export const getUserprofile = async (req, res) => {
     const {id} = req.user;
     const User = await user.findById(id);
